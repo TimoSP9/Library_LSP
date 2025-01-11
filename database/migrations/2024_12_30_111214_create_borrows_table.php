@@ -13,20 +13,19 @@ return new class extends Migration
     {
         Schema::create('borrows', function (Blueprint $table) {
             $table->id();
+
+            $table->string('name');
             // Assuming 'id' is the primary key in the 'books' table
-            $table->unsignedBigInteger('book1')->nullable();
-            $table->unsignedBigInteger('book2')->nullable();
-            $table->unsignedBigInteger('book3')->nullable();
+            $table->string('book1')->nullable();
+            $table->string('book2')->nullable();
+            $table->string('book3')->nullable();
             $table->unsignedBigInteger('user_id');
+
+            $table->boolean('return')->default(0);
             $table->timestamps();
 
-            // Foreign key constraints to the 'books' table
-            $table->foreign('book1')->references('id')->on('books')->onDelete('cascade');
-            $table->foreign('book2')->references('id')->on('books')->onDelete('cascade');
-            $table->foreign('book3')->references('id')->on('books')->onDelete('cascade');
-
             // Foreign key constraint to the 'users' table
-            $table->foreign('user_id')->references('id')->on('register')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('register')->onDelete('no action');
         });
     }
 

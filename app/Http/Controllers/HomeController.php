@@ -11,7 +11,7 @@ class HomeController extends Controller
     {
         // Retrieve all books from the database
         $books = Book::all();
-    
+        $userId = auth()->id();
         // Pass books to the view
         return view('HomeUser', compact('books'));
     }

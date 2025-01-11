@@ -66,32 +66,57 @@
         <form action="{{ route('return.store') }}" method="POST">
             @csrf
 
+            <label for="name">Select Borrower</label>
+            <select name="name" id="name" onchange="fetchBooks()">
+                <option value="">Select a Borrower</option>
+                @foreach($borrowers as $borrower)
+                    <option value="{{ $borrower->name }}">{{ $borrower->name }}</option>
+                @endforeach
+            </select><br>
+
             <label for="book1">Select Book 1</label>
             <select name="book1" id="book1">
                 <option value="">Select a Book</option>
-                @foreach($borrowedBooks as $borrowed)
-                    <option value="{{ $borrowed->book1 }}">{{ $borrowed->book1 }}</option>
-                @endforeach
             </select><br>
 
             <label for="book2">Select Book 2</label>
             <select name="book2" id="book2">
                 <option value="">Select a Book</option>
-                @foreach($borrowedBooks as $borrowed)
-                    <option value="{{ $borrowed->book2 }}">{{ $borrowed->book2 }}</option>
-                @endforeach
             </select><br>
 
             <label for="book3">Select Book 3</label>
             <select name="book3" id="book3">
                 <option value="">Select a Book</option>
-                @foreach($borrowedBooks as $borrowed)
-                    <option value="{{ $borrowed->book3 }}">{{ $borrowed->book3 }}</option>
-                @endforeach
             </select><br>
 
             <button type="submit">Return Books</button>
         </form>
     </div>
+
+    <script>
+    function fetchBooks() {
+        var borrowerName = document.getElementById('name').value;
+        console.log('Selected borrower:', borrowerName);
+        // Clear previous book options
+        document.getElementById('book1').innerHTML = "<option value=''>Select a Book</option>";
+        document.getElementById('book2').innerHTML = "<option value=''>Select a Book</option>";
+        document.getElementById('book3').innerHTML = "<option value=''>Select a Book</option>";
+
+        // Fetch borrowed books based on borrower name
+        if (borrowerName) {
+            fetch(`/get-borrowed-books/${borrowerName}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Borrowed books:', data); // Log data from API
+                    
+                    // Fill the dropdowns with the borrowed books
+                    document.getElementById('book1').innerHTML += `<option value="${data[0].book1}" selected>${data[0].book1}</option>`;
+                    document.getElementById('book2').innerHTML += `<option value="${data[0].book2}" selected>${data[0].book2}</option>`;
+                    document.getElementById('book3').innerHTML += `<option value="${data[0].book3}" selected>${data[0].book3}</option>`;
+                });
+        }
+    }
+    </script>
+
 </body>
 </html>

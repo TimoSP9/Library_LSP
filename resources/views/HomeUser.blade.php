@@ -4,110 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Catalog</title>
+    <!-- Tambahkan link ke Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Reset some default styles */
+        /* Custom styling */
         body, h1, h2, p, button {
             margin: 0;
             padding: 0;
         }
-
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            padding-top: 0px;
         }
-
-        /* Sticky navigation bar */
         .navbar {
             background-color: #333;
             color: white;
             position: sticky;
             top: 0;
             width: 100%;
-            z-index: 1000;
             padding: 15px;
         }
-
         .navbar a {
             color: white;
             text-decoration: none;
             margin: 0 15px;
             font-size: 18px;
         }
-
-        .navbar a:hover {
-            text-decoration: underline;
-        }
-
-        /* Container for book cards */
         .container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             padding: 20px;
         }
-
-        /* Book card styling */
         .book-card {
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 8px;
             width: 200px;
             margin: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
             padding: 20px;
-            transition: transform 0.3s ease-in-out;
         }
-
-        .book-card:hover {
-            transform: scale(1.05);
-        }
-
-        .book-card img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .book-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .book-author {
-            color: #555;
-            margin-top: 5px;
-        }
-
         .borrow-btn {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
+            padding: 10px;
             width: 100%;
-        }
-
-        .borrow-btn:hover {
-            background-color: #45a049;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .book-card {
-                width: 45%; /* Adjust width for tablets */
-            }
-        }
-
-        @media (max-width: 500px) {
-            .book-card {
-                width: 90%; /* Full width for mobile devices */
-            }
         }
     </style>
 </head>
@@ -116,14 +59,54 @@
     <nav class="navbar">
         <a href="{{ url('/home') }}">Home</a>
         <a href="{{ url('/borrow') }}">Borrow</a>
-        <a href="{{ url('/history') }}">History</a>
+        <a href="{{ route('history') }}">History</a>
+        <a href="{{ url('/return') }}">Return</a>
     </nav>
+
+    <!-- Tombol "Add Book" -->
+    <div class="container mt-4">
+        <button class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#addBookModal">Add Book</button>
+    </div>
+
+    <!-- Modal Pop-up untuk Add Book -->
+    <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBookModalLabel">Add New Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form untuk Add Book -->
+                    <form action="{{ route('book.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Book Title</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="writer" class="form-label">Writer</label>
+                            <input type="text" class="form-control" id="writer" name="writer" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="genre" class="form-label">Genre</label>
+                            <input type="text" class="form-control" id="genre" name="genre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="year" class="form-label">Year</label>
+                            <input type="number" class="form-control" id="year" name="year" required min="1000" max="9999">
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Book</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Book Catalog -->
     <div class="container">
         @forelse($books as $book)
             <div class="book-card">
-                <img src="https://via.placeholder.com/200x300?text=Book+Cover" alt="Book Cover">
                 <h2 class="book-title">{{ $book->title }}</h2>
                 <p class="book-author">by {{ $book->writer }}</p>
                 <p class="book-genre">Genre: {{ $book->genre }}</p>
@@ -134,5 +117,8 @@
             <p>No books available at the moment.</p>
         @endforelse
     </div>
+
+    <!-- Tambahkan link ke Bootstrap JS dan Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

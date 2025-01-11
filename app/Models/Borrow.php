@@ -11,14 +11,23 @@ class Borrow extends Model
     protected $table = 'borrows';
     
     protected $fillable = [
+        'name',
         'book1',
         'book2',
         'book3',
+        'user_id',
+        'return',
     ];
 
-    // Define a relationship to the User model, if needed (you'll have a User model set up in your app).
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+   // Relasi ke User, jika diperlukan
+   public function user()
+   {
+       return $this->belongsTo(User::class);
+   }
+
+   // Method untuk menandai buku sudah dikembalikan
+   public function tandaiSebagaiDikembalikan()
+   {
+       $this->update(['return' => 1]);  // Mengubah kolom 'return' jadi 1 (dikembalikan)
+   }
 }

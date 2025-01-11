@@ -11,7 +11,7 @@ class Register extends Model implements Authenticatable
     use HasFactory;
 
     protected $table = 'register'; // Specify the correct table name here
-    // protected $connection = 'mariaDB';  // Ensure it is pointing to the 'library' database
+    // protected $connection = 'mariaDB'; 
 
     protected $fillable = [
         'email',
@@ -38,7 +38,7 @@ class Register extends Model implements Authenticatable
 
     public function getRememberToken()
     {
-        return $this->remember_token; // Optional: for "remember me" functionality
+        return $this->remember_token; 
     }
 
     public function setRememberToken($value)

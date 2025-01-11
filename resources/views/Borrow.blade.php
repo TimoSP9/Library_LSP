@@ -17,7 +17,6 @@
             padding-top: 0px;
         }
 
-        /* Sticky navigation bar */
         .navbar {
             background-color: #333;
             color: white;
@@ -39,7 +38,6 @@
             text-decoration: underline;
         }
 
-        /* Container for book cards */
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -47,7 +45,6 @@
             padding: 20px;
         }
 
-        /* Book card styling */
         .book-card {
             background-color: white;
             border: 1px solid #ddd;
@@ -82,33 +79,24 @@
             margin-top: 5px;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .book-card {
-                width: 45%; /* Adjust width for tablets */
+                width: 45%;
             }
         }
 
         @media (max-width: 500px) {
             .book-card {
-                width: 90%; /* Full width for mobile devices */
+                width: 90%;
             }
         }
 
-        /* Form Styles */
         .form-container {
             margin-top: 20px;
             text-align: center;
         }
 
-        .form-container input {
-            width: 80%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
+        .form-container input,
         .form-container select {
             width: 80%;
             padding: 10px;
@@ -137,7 +125,19 @@
         <a href="{{ url('/home') }}">Home</a>
         <a href="{{ url('/borrow') }}">Borrow</a>
         <a href="{{ url('/history') }}">History</a>
+        <a href="{{ url('/return') }}">Return</a>
     </nav>
+
+    <!-- Display Flash Messages -->
+    @if(session('success'))
+        <div style="color: green; text-align: center;">
+            {{ session('success') }}
+        </div>
+    @elseif(session('error'))
+        <div style="color: red; text-align: center;">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <!-- Book Catalog -->
     <div class="container">
@@ -152,34 +152,49 @@
 
     <!-- Borrow Form -->
     <div class="form-container">
-        <form action="{{ route('borrow') }}" method="POST">
+        <form action="{{ route('borrow.store') }}" method="POST">
             @csrf
 
-            
+            <!-- Name Input -->
+            <label for="name">Your Name</label>
+            <input type="text" name="name" id="name" value="{{ old('name') }}" required>
+            @error('name')
+                <div style="color: red;">{{ $message }}</div>
+            @enderror
+
             <!-- Book Selection -->
             <label for="book1">Select Book 1</label>
             <select name="book1" id="book1" required>
                 <option value="">Select a Book</option>
                 @foreach($books as $book)
-                    <option value="{{ $book->title }}">{{ $book->title }}</option>
+                    <option value="{{ $book->title }}" {{ old('book1') == $book->title ? 'selected' : '' }}>{{ $book->title }}</option>
                 @endforeach
             </select><br>
+            @error('book1')
+                <div style="color: red;">{{ $message }}</div>
+            @enderror
 
             <label for="book2">Select Book 2</label>
             <select name="book2" id="book2">
                 <option value="">Select a Book</option>
                 @foreach($books as $book)
-                    <option value="{{ $book->title }}">{{ $book->title }}</option>
+                    <option value="{{ $book->title }}" {{ old('book2') == $book->title ? 'selected' : '' }}>{{ $book->title }}</option>
                 @endforeach
             </select><br>
+            @error('book2')
+                <div style="color: red;">{{ $message }}</div>
+            @enderror
 
             <label for="book3">Select Book 3</label>
             <select name="book3" id="book3">
                 <option value="">Select a Book</option>
                 @foreach($books as $book)
-                    <option value="{{ $book->title }}">{{ $book->title }}</option>
+                    <option value="{{ $book->title }}" {{ old('book3') == $book->title ? 'selected' : '' }}>{{ $book->title }}</option>
                 @endforeach
             </select><br>
+            @error('book3')
+                <div style="color: red;">{{ $message }}</div>
+            @enderror
 
             <button type="submit">Borrow Books</button>
         </form>
